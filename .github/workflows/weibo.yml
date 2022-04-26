@@ -48,8 +48,6 @@ jobs:
           git config user.email github-actions@github.com
           git commit -am "push update for weibo crawler"
           git push  
-          echo "good to publish: ${{env.GOOD_TO_PUBLISH}}"
-          echo "data to publish: ${{env.DATA}}"
       - if: env.GOOD_TO_PUBLISH == 'Y'
         uses: actions/checkout@v3
         with:

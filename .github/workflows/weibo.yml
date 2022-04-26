@@ -54,13 +54,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          repository: ScienisTmiaoT/to
+          repository: ScienisTmiaoT/popwords
           token: ${{ secrets.PAT }}
           path: popwords
       - if: env.GOOD_TO_PUBLISH == 'Y'
         working-directory: ./popwords
         run: |
-          echo ${{env.DATA}} > data.js
+          echo ${{env.DATA}} > js/data.js
       - if: env.GOOD_TO_PUBLISH == 'Y'
         name: Push data.js
         working-directory: ./popwords

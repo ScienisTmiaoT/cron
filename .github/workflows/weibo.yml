@@ -38,7 +38,7 @@ jobs:
           pip install -r ./requirements.txt # export dependencies: pip freeze > requirements.txt
       - name: Set env for python script
         run: |
-          echo "topic_page_num=10" >> $GITHUB_ENV
+          echo "topic_page_num=100" >> $GITHUB_ENV
           echo "hot_words_top_k=100" >> $GITHUB_ENV
           echo "sleep_low=1" >> $GITHUB_ENV
           echo "sleep_high=3" >> $GITHUB_ENV     

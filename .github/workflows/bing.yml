@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Weibo
+name: Bing
 
 # Controls when the workflow will run
 on:
@@ -20,34 +20,46 @@ jobs:
   Fetch-and-Publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Check out taskbot
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          repository: ScienisTmiaoT/weibo-crawler
+          repository: ScienisTmiaoT/taskbot
           token: ${{ secrets.PAT }}
-          path: weibo  
+          path: taskbot  
+      - name: Check out photogallery
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: ScienisTmiaoT/photogallery
+          token: ${{ secrets.PAT }}
+          path: photogallery   
       - name: setup python
         uses: actions/setup-python@v3
         with:
           python-version: '3.10.0' #install the python needed
           cache: 'pip'
       - name: install dependencies
-        working-directory: ./weibo
+        working-directory: ./taskbot
         run: |
-          pip install -r ./requirements.txt # export dependencies: pip freeze > requirements.txt
+          pip install -r ./bing/requirements.txt # export dependencies: pip freeze > requirements.txt
       - name: Set env for python script
         run: |
-          echo "topic_page_num=100" >> $GITHUB_ENV
-          echo "hot_words_top_k=100" >> $GITHUB_ENV
-          echo "sleep_low=1" >> $GITHUB_ENV
-          echo "sleep_high=3" >> $GITHUB_ENV     
+          echo "format=js" >> $GITHUB_ENV
+          echo "start_index=0" >> $GITHUB_ENV
+          echo "depth=1" >> $GITHUB_ENV
+          echo "language=zh-CN" >> $GITHUB_ENV
+          echo "root_path=bing" >> $GITHUB_ENV
+          echo "pic_path=../photogallery/img" >> $GITHUB_ENV
+          echo "consume_data_file_path=../photogallery/js/data.js" >> $GITHUB_ENV
+          echo "sleep_low=1" >> $GITHUB_ENV     
+          echo "sleep_high=3" >> $GITHUB_ENV  
       - name: execute py script # run the .py to generate the latest data
-        working-directory: ./weibo
+        working-directory: ./taskbot
         run: |
-          python ./weibo.py
-      - name: Push update
-        working-directory: ./weibo
+          python ./bing/bing.py
+      - if: env.GOOD_TO_PUBLISH == 'Y'
+        working-directory: ./taskbot
         run: |
           git add .
           git config user.name github-actions
@@ -55,19 +67,8 @@ jobs:
           git commit -am "push update for weibo crawler"
           git push  
       - if: env.GOOD_TO_PUBLISH == 'Y'
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          repository: ScienisTmiaoT/popwords
-          token: ${{ secrets.PAT }}
-          path: popwords
-      - if: env.GOOD_TO_PUBLISH == 'Y'
-        working-directory: ./popwords
-        run: |
-          echo ${{env.DATA}} > js/data.js
-      - if: env.GOOD_TO_PUBLISH == 'Y'
         name: Push data.js
-        working-directory: ./popwords
+        working-directory: ./photogallery
         run: |
           git add .
           git config user.name github-actions

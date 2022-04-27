@@ -9,8 +9,8 @@ on:
 #    branches: [ main ]
 #    paths:
 #    - '!.github/workflows/**'
-#   schedule:
-#     - cron: "0 * * * *"
+  schedule:
+    - cron: "0 17 * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "format=js" >> $GITHUB_ENV
           echo "start_index=0" >> $GITHUB_ENV
-          echo "depth=10" >> $GITHUB_ENV
+          echo "depth=1" >> $GITHUB_ENV
           echo "language=zh-CN" >> $GITHUB_ENV
           echo "root_path=bing" >> $GITHUB_ENV
           echo "pic_path=../photogallery/img" >> $GITHUB_ENV
@@ -73,5 +73,5 @@ jobs:
           git add .
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -am "push data.js"
+          git commit -am "update photo"
           git push  

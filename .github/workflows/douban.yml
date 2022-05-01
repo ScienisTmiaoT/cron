@@ -52,7 +52,8 @@ jobs:
         working-directory: ./taskbot
         run: |
           python main.py
-      - if: env.GOOD_TO_PUBLISH == 'Y'
+#       - if: env.GOOD_TO_PUBLISH == 'Y'
+      - name: Push taskbot
         working-directory: ./taskbot
         run: |
           git add .
@@ -60,8 +61,8 @@ jobs:
           git config user.email github-actions@github.com
           git commit -am "push update for douban"
           git push  
-      - if: env.GOOD_TO_PUBLISH == 'Y'
-        name: Push dataset
+#       - if: env.GOOD_TO_PUBLISH == 'Y'
+      - name: Push dataset
         working-directory: ./dataset
         run: |
           git add .

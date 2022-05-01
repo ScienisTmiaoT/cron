@@ -45,12 +45,13 @@ jobs:
           pip install -r ./bing/requirements.txt # export dependencies: pip freeze > requirements.txt
       - name: Set env for python script
         run: |
+          echo "script=bing" >> $GITHUB_ENV
           echo "prod=Y" >> $GITHUB_ENV
           echo "root_path=bing" >> $GITHUB_ENV
       - name: execute py script # run the .py to generate the latest data
         working-directory: ./taskbot
         run: |
-          python ./bing/bing.py
+          python ./main.py
       - if: env.GOOD_TO_PUBLISH == 'Y'
         working-directory: ./taskbot
         run: |

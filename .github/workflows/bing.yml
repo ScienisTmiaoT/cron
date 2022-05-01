@@ -45,15 +45,8 @@ jobs:
           pip install -r ./bing/requirements.txt # export dependencies: pip freeze > requirements.txt
       - name: Set env for python script
         run: |
-          echo "format=js" >> $GITHUB_ENV
-          echo "start_index=0" >> $GITHUB_ENV
-          echo "depth=1" >> $GITHUB_ENV
-          echo "language=zh-CN" >> $GITHUB_ENV
+          echo "prod=Y" >> $GITHUB_ENV
           echo "root_path=bing" >> $GITHUB_ENV
-          echo "pic_path=../photogallery/img" >> $GITHUB_ENV
-          echo "consume_data_file_path=../photogallery/js/data.js" >> $GITHUB_ENV
-          echo "sleep_low=1" >> $GITHUB_ENV     
-          echo "sleep_high=3" >> $GITHUB_ENV  
       - name: execute py script # run the .py to generate the latest data
         working-directory: ./taskbot
         run: |

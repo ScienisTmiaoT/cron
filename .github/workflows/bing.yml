@@ -51,7 +51,7 @@ jobs:
       - name: execute py script # run the .py to generate the latest data
         working-directory: ./taskbot
         run: |
-          python ./main.py
+          python main.py
       - if: env.GOOD_TO_PUBLISH == 'Y'
         working-directory: ./taskbot
         run: |

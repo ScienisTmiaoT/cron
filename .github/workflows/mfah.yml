@@ -1,0 +1,53 @@
+name: MFAH
+
+on:
+  schedule:
+    - cron: "0 17 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  Fetch-and-Publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out taskbot
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: ScienisTmiaoT/taskbot
+          token: ${{ secrets.PAT }}
+          path: taskbot  
+      - name: Check out mfah
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          repository: ScienisTmiaoT/mfah
+          token: ${{ secrets.PAT }}
+          path: mfah   
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.0' #install the python needed
+          cache: 'pip'
+      - name: install dependencies
+        working-directory: ./taskbot
+        run: |
+          pip install -r ./mfah/requirements.txt # export dependencies: pip freeze > requirements.txt
+      - name: Set env for python script
+        run: |
+          echo "script=mfah" >> $GITHUB_ENV
+          echo "prod=Y" >> $GITHUB_ENV
+          echo "root_path=mfah" >> $GITHUB_ENV
+      - name: execute py script # run the .py to generate the latest data
+        working-directory: ./taskbot
+        run: |
+          python main.py
+      - if: env.GOOD_TO_PUBLISH == 'Y'
+        name: Push mfah
+        working-directory: ./mfah
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "update mfah"
+          git push  

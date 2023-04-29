@@ -20,7 +20,7 @@ jobs:
       - name: Check out poptags
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: master
           repository: ScienisTmiaoT/poptags
           token: ${{ secrets.PAT }}
           path: poptags   

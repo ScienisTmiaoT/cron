@@ -37,7 +37,7 @@ jobs:
       - name: Check out trends
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: master
           repository: ScienisTmiaoT/trends
           token: ${{ secrets.PAT }}
           path: trends   

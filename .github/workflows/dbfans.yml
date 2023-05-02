@@ -10,7 +10,7 @@ on:
 #    paths:
 #    - '!.github/workflows/**'
   schedule:
-    - cron: "30 8,11,14,17,19,21,23 * * *"
+    - cron: "30 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

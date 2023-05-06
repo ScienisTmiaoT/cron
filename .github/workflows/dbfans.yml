@@ -59,7 +59,8 @@ jobs:
         working-directory: ./taskbot
         run: |
           python main.py
-      - name: Push dataset
+      - if: env.GOOD_TO_COMMIT == 'Y'
+        name: Push dataset
         working-directory: ./dataset
         run: |
           git add .

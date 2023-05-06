@@ -53,7 +53,7 @@ jobs:
       - name: install dependencies
         working-directory: ./taskbot
         run: |
-          pip install -r ./dbfans/requirements.txt # export dependencies: pip freeze > requirements.txt
+          pip install -r ./dbgenres/requirements.txt # export dependencies: pip freeze > requirements.txt
       - name: Set env for python script
         run: |
           echo "script=dbgenres" >> $GITHUB_ENV

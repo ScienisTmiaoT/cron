@@ -30,7 +30,14 @@ jobs:
           fetch-depth: 0
           repository: ScienisTmiaoT/taskbot
           token: ${{ secrets.PAT }}
-          path: taskbot  
+          path: taskbot
+      - name: Check out logger
+        uses: actions/checkout@v3
+        with:
+          ref: dbfans
+          repository: ScienisTmiaoT/logger
+          token: ${{ secrets.PAT }}
+          path: logger
       - name: Check out dataset
         uses: actions/checkout@v3
         with:
@@ -63,6 +70,15 @@ jobs:
         working-directory: ./taskbot
         run: |
           python main.py
+      - if: env.GOOD_TO_LOG == 'Y'
+        name: Push logger
+        working-directory: ./logger
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "push update for dbfans"
+          git push  
       - if: env.GOOD_TO_COMMIT == 'Y'
         name: Push dataset
         working-directory: ./dataset

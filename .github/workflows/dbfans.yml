@@ -70,15 +70,6 @@ jobs:
         working-directory: ./taskbot
         run: |
           python main.py
-      - if: env.GOOD_TO_LOG == 'Y'
-        name: Push logger
-        working-directory: ./logger
-        run: |
-          git add .
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit -am "push update for dbfans"
-          git push  
       - if: env.GOOD_TO_COMMIT == 'Y'
         name: Push dataset
         working-directory: ./dataset
@@ -96,4 +87,13 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git commit -am "update trends"
+          git push
+      - if: env.GOOD_TO_LOG == 'Y'
+        name: Push logger
+        working-directory: ./logger
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "push update for dbfans"
           git push  

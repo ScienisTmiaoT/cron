@@ -31,6 +31,13 @@ jobs:
           repository: ScienisTmiaoT/taskbot
           token: ${{ secrets.PAT }}
           path: taskbot
+      - name: Check out logger
+        uses: actions/checkout@v3
+        with:
+          ref: dbfans
+          repository: ScienisTmiaoT/logger
+          token: ${{ secrets.PAT }}
+          path: logger
       - name: Check out dataset
         uses: actions/checkout@v3
         with:

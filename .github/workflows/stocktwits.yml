@@ -1,0 +1,90 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Stocktwits
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+#  push:
+#    branches: [ main ]
+#    paths:
+#    - '!.github/workflows/**'
+  schedule:
+    - cron: "*/20 * * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency:
+  group: stwits
+  cancel-in-progress: false
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  Fetch-and-Publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out taskbot
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: ScienisTmiaoT/taskbot
+          token: ${{ secrets.PAT }}
+          path: taskbot
+      - name: Check out logger
+        uses: actions/checkout@v3
+        with:
+          ref: stocktwits
+          repository: ScienisTmiaoT/logger
+          token: ${{ secrets.PAT }}
+          path: logger
+      - name: Check out dataset
+        uses: actions/checkout@v3
+        with:
+          ref: stocktwits
+          repository: ScienisTmiaoT/stock-dataset
+          token: ${{ secrets.PAT }}
+          path: stock-dataset
+      # - name: Check out trends
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: master
+      #     repository: ScienisTmiaoT/trends
+      #     token: ${{ secrets.PAT }}
+      #     path: trends   
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' #install the python needed
+          cache: 'pip'
+      - name: install dependencies
+        working-directory: ./taskbot
+        run: |
+          pip install -r ./sense_stock/stocktwits/requirements.txt # export dependencies: pip freeze > requirements.txt
+      - name: Set env for python script
+        run: |
+          echo "script=stocktwits" >> $GITHUB_ENV
+          echo "prod=Y" >> $GITHUB_ENV
+          echo "root_path=sense_stock/stocktwits" >> $GITHUB_ENV
+      - name: execute py script # run the .py to generate the latest data
+        working-directory: ./taskbot
+        run: |
+          python main.py
+      - if: env.GOOD_TO_COMMIT == 'Y'
+        name: Push dataset
+        working-directory: ./stock-dataset
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "push update for stocktwits"
+          git push  
+      # - if: env.GOOD_TO_PUBLISH == 'Y'
+      #   name: Push trends
+      #   working-directory: ./trends
+      #   run: |
+      #     git add .
+      #     git config user.name github-actions
+      #     git config user.email github-actions@github.com
+      #     git commit -am "update trends"
+      #     git push

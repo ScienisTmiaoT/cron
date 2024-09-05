@@ -1,0 +1,20 @@
+name: git-mirror
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  Fetch-and-Publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out dataset
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          repository: ScienisTmiaoT/stock-dataset
+          token: ${{ secrets.PAT }}
+          path: stock-dataset 
+      - name: mirror dataset
+        working-directory: ./stock-dataset
+        run: |
+          git push --mirror https://github.com/ScienisTmiaoT/stock-dataset-v1.git

@@ -7,14 +7,26 @@ jobs:
   Fetch-and-Publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out dataset
+      - name: Check out from dataset 
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          ref: stockanalyzer
+          repository: ScienisTmiaoT/stock-dataset-v1
+          token: ${{ secrets.PAT }}
+          path: stock-dataset-v1 
+      - name: Check out to dataset
+        uses: actions/checkout@v4
+        with:
+          ref: stockanalyzer
           repository: ScienisTmiaoT/stock-dataset
           token: ${{ secrets.PAT }}
           path: stock-dataset 
       - name: mirror dataset
         working-directory: ./stock-dataset
         run: |
-          git push --mirror https://github.com/ScienisTmiaoT/stock-dataset-v1.git
+          cp -R ../stock-dataset-v1/data .
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "migrate stock-dataset"
+          git push 

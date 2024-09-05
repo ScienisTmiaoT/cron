@@ -10,14 +10,14 @@ jobs:
       - name: Check out from dataset 
         uses: actions/checkout@v4
         with:
-          ref: stocktwits
+          ref: yahoofinance
           repository: ScienisTmiaoT/stock-dataset-v1
           token: ${{ secrets.PAT }}
           path: stock-dataset-v1 
       - name: Check out to dataset
         uses: actions/checkout@v4
         with:
-          ref: stocktwits
+          ref: yahoofinance
           repository: ScienisTmiaoT/stock-dataset
           token: ${{ secrets.PAT }}
           path: stock-dataset 

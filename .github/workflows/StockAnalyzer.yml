@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: stockanalyzer
-          repository: ScienisTmiaoT/stock-dataset-v1
+          repository: ScienisTmiaoT/stock-dataset-v2
           token: ${{ secrets.PAT }}
           path: stock-dataset
       # - name: Check out trends
@@ -81,7 +81,7 @@ jobs:
           git add .
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git commit -am "migrate stockanalyzer in stock-dataset-v1 to B2"
+          git commit -am "migrate stockanalyzer in stock-dataset-v2 to B2"
           git push  
       # - if: env.GOOD_TO_PUBLISH == 'Y'
       #   name: Push trends

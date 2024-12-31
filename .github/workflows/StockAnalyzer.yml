@@ -34,6 +34,7 @@ jobs:
       - name: Check out logger
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           ref: stockanalyzer
           repository: ScienisTmiaoT/logger
           token: ${{ secrets.PAT }}

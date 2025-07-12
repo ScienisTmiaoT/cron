@@ -1,16 +1,51 @@
 name: Keepalive
 on:
   schedule:
-    - cron: "0 19 * * *"
+    - cron: "0 19 * * 0"
   workflow_dispatch:
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  keepalive-job:
-    name: Keepalive Workflow
+  Fetch-and-Publish:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out taskbot
+        uses: actions/checkout@v3
         with:
+          fetch-depth: 0
+          repository: ScienisTmiaoT/taskbot
+          token: ${{ secrets.PAT }}
+          path: taskbot
+      - name: Check out cron
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
+          repository: ScienisTmiaoT/cron
           token: ${{ secrets.KEEPALIVE_PAT }}
-      - uses: gautamkrishnar/keepalive-workflow@v2
+          path: cron 
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' #install the python needed
+          cache: 'pip'
+      - name: Set env for python script
+        run: |
+          echo "script=keepalive" >> $GITHUB_ENV
+          echo "KEEPALIVE_UPDATE_PATH=../cron/resources/keepalive.txt" >> $GITHUB_ENV
+      - name: execute py script # run the .py to generate the latest data
+        working-directory: ./taskbot
+        run: |
+          python main.py
+      - name: Push keepalive
+        working-directory: ./cron
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "update keepalive in cron"
+          git push  

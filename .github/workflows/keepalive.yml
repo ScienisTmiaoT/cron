@@ -4,25 +4,13 @@ on:
     - cron: "0 19 * * *"
   workflow_dispatch:
 jobs:
-  main-job:
-    name: Main Job
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # - step1
-      # - step 2
-      # - Step N
   keepalive-job:
     name: Keepalive Workflow
-    if: ${{ always() }}
-    needs: main-job
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
       - uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          use_api: false

@@ -1,21 +1,13 @@
-# workflow to prevent GitHub from suspending cronjob based triggers due to repository inactivity after 60 days
-
 name: Keepalive
-
-# Controls when the workflow will run
 on:
   schedule:
     - cron: "0 19 * * *"
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 jobs:
-  cronjob-based-github-action:
+  keepalive-job:
+    name: Keepalive Workflow
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: gautamkrishnar/keepalive-workflow@v1
-        with:
-          committer_username: keepalive-bot
-          committer_email: bot@keepalive.io
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2

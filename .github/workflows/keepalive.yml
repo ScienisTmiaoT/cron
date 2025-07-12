@@ -2,6 +2,8 @@ name: Keepalive
 on:
   schedule:
     - cron: "0 19 * * *"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 jobs:
   keepalive-job:
     name: Keepalive Workflow
